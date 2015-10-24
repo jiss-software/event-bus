@@ -1,5 +1,5 @@
 Event Bus Service
------------------
+=================
 
 Install:
 
@@ -13,7 +13,7 @@ Run:
     python server.py &
 
 Requests
-========
+--------
 
     GET /events/<CONTEXT>/<CHANNEL>
 
@@ -34,7 +34,7 @@ Requests
 Опубликовать событие. В теле высылается исключительно PAYLOAD данные в виде словаря.
 
 Data Structure
-==============
+--------------
 
     {
     	"issuer": "JERPi",
