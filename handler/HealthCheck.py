@@ -7,7 +7,7 @@ class HealthCheckHandler(tornado.web.RequestHandler):
         self.logger = logger
 
     def get(self):
-        self.logger.info('Request to health check: /')
+        self.logger.info('Request to health check')
 
         result = json.dumps({
             'status': 'OK'

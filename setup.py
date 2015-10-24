@@ -3,8 +3,8 @@
 from setuptools import setup
 
 setup(
-    name='PythonServiceTemplate',
-    description='This is a template for micro service using python.',
+    name='EventBus',
+    description='Event Bus components store events occurred in system.',
     version='1.0',
     author='Anton Iskov',
     author_email='aiskov@jiss-software.com',
