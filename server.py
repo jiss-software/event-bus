@@ -31,7 +31,7 @@ context = dict(
 
 app = tornado.web.Application([
     (r"/", HealthCheckHandler, context),
-    (r"/events", EventsHandler, context),
+    (r"/events/([A-Za-z_.]*)/([A-Za-z_.]*)", EventsHandler, context),
 ], autoreload=True)
 
 app.listen(options.port)
