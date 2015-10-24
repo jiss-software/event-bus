@@ -15,19 +15,20 @@ Run:
 Requests
 ========
 
-### GET `/events/<CONTEXT>/<CHANNEL>`
+    GET /events/<CONTEXT>/<CHANNEL>
 
 Получить все элементы.
 
-### GET `/events/<CONTEXT>/<CHANNEL>?start=<timestamp>`
+    GET /events/<CONTEXT>/<CHANNEL>?start=<timestamp>
 
 Список событий начиная с выбраного момента.
 
-### GET `/events/<CONTEXT>/<CHANNEL>?peek=<cursor>`
+    GET /events/<CONTEXT>/<CHANNEL>?peek=<cursor>
 
 Получить следующий элемент после идентификатора курсора.  
 
-### POST `/events/<CONTEXT>/<CHANNEL>`
+    POST /events/<CONTEXT>/<CHANNEL>
+
 `X-EVENT-ISSUER=<ISSUER>` - объязательный заголовок
 
 Опубликовать событие. В теле высылается исключительно PAYLOAD данные в виде словаря.
