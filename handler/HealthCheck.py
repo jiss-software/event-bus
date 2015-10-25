@@ -1,5 +1,5 @@
 import tornado
-import json
+from bson.json_util import dumps
 
 
 class HealthCheckHandler(tornado.web.RequestHandler):
@@ -22,7 +22,7 @@ class HealthCheckHandler(tornado.web.RequestHandler):
             if components[key] is None:
                 components[key] = False
 
-        result = json.dumps({
+        result = dumps({
             'status': False not in components.values(),
             'components': components
         })
