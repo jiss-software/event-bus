@@ -54,3 +54,16 @@ Data Structure
 * channel - канал публикации, другими словами тип события
 * timestamp - время регистрации события, на шине (назначаеться автоматически)
 * payload - набор данных для хранения в базе 
+
+Test calls from command line
+----------------------------
+
+Register new event
+
+    curl --data '{"x": 1, "y": "test"}' -X POST -H 'X-JISS-ISSUER: TEST' 127.0.0.1:33002/events/context/CHANNEL
+    
+Read events
+
+    curl -X POST 127.0.0.1:33002/events/context/CHANNEL
+    curl -X POST 127.0.0.1:33002/events/context/CHANNEL?start=123
+    curl -X POST 127.0.0.1:33002/events/context/CHANNEL?peek=2
