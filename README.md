@@ -12,6 +12,8 @@ Run:
     source env/bin/activate
     python server.py &
 
+Default port 33002.
+
 Requests
 --------
 
