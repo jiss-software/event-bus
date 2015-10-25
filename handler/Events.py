@@ -2,6 +2,7 @@ import tornado
 from pymongo import ASCENDING
 from tornado.options import options
 import time
+import re
 from bson.json_util import dumps, loads
 
 
@@ -28,13 +29,13 @@ class EventsHandler(tornado.web.RequestHandler):
         condition = {'context': context, 'channel': channel}
 
         if start:
-            if not start.isdigit():
+            if re.match("^\d+?\.\d+?$", start) is None:
                 self.set_status(400)
                 self.write(dumps({'error': 'Start param should be and integer value.'}))
                 return
 
             self.logger.info('Start condition used: `%s`' % start)
-            condition['timestamp'] = {'$gt': long(start)}
+            condition['timestamp'] = {'$gt': float(start)}
 
         cursor = self.mongodb[options.db_name].find(condition)
 
