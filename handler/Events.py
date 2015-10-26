@@ -9,7 +9,7 @@ from bson.json_util import dumps, loads
 class EventsHandler(tornado.web.RequestHandler):
     def initialize(self, logger, mongodb):
         self.logger = logger
-        self.mongodb = mongodb[options.db_name]
+        self.mongodb = mongodb[options.db_name]['Events']
 
     @tornado.web.asynchronous
     @tornado.gen.coroutine
@@ -37,7 +37,7 @@ class EventsHandler(tornado.web.RequestHandler):
             self.logger.info('Start condition used: `%s`' % start)
             condition['timestamp'] = {'$gt': float(start)}
 
-        cursor = self.mongodb[options.db_name].find(condition)
+        cursor = self.mongodb.find(condition)
 
         # Use peek mode
         if peek:
@@ -93,7 +93,7 @@ class EventsHandler(tornado.web.RequestHandler):
             "payload": loads(self.request.body)
         }
 
-        new_id = yield self.mongodb[options.db_name].save(event)
+        new_id = yield self.mongodb.save(event)
 
         result = dumps({'id': new_id, 'timestamp': timestamp})
         self.logger.info('New event registered events list: %s' % dumps(event))
