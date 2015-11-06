@@ -6,9 +6,11 @@ from handler import EventsHandler
 import motor
 from tornado.options import define, options
 import os
+import sys
+
 
 define("port", default=33002, help="Application port")
-define("db_address", default="mongodb://localhost:27017", help="Database address")
+define("db_address", default="mongodb://mongodb:27017", help="Database address")
 define("db_name", default="Events", help="Database name")
 define("max_buffer_size", default=50 * 1024**2, help="")
 define("log_dir", default="log", help="Logger directory")
@@ -23,7 +25,11 @@ logging.basicConfig(
 )
 
 ioLoop = tornado.ioloop.IOLoop.current()
-mongodb = ioLoop.run_sync(motor.MotorClient(options.db_address).open)
+try:
+    mongodb = ioLoop.run_sync(motor.MotorClient(options.db_address).open)
+except:
+    logging.getLogger('INIT').error('Cannot connect to mongodb')
+    sys.exit()
 
 context = dict(
     logger=logging.getLogger('HealthCheck'),
@@ -39,7 +45,7 @@ app.listen(options.port)
 
 if __name__ == "__main__":
     try:
-        logging.info("Starting HTTP proxy on port %d" % options.port)
+        logging.info("Starting HTTP server on port %d" % options.port)
         ioLoop.start()
     except KeyboardInterrupt:
         logging.info("Shutting down server HTTP proxy on port %d" % options.port)
