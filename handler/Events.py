@@ -26,7 +26,10 @@ class EventsHandler(tornado.web.RequestHandler):
             return
 
         # Add request conditions
-        condition = {'context': context, 'channel': channel}
+        if context == 'all':
+            condition = {'channel': channel}
+        else:
+            condition = {'context': context, 'channel': channel}
 
         if start:
             if re.match("^\d+?\.\d+?$", start) is None:
