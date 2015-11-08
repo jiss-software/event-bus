@@ -15,6 +15,7 @@ class EventsHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
     def get(self, context, channel):
         self.logger.info('Request to events list for `%s` at `%s`' % (channel, context))
+        self.set_header('Content-Type', 'application/json')
 
         # Load params and check that they are consistent
         start = self.get_query_argument('start', default=None)
@@ -73,6 +74,7 @@ class EventsHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
     def post(self, context, channel):
         self.logger.info('Request to register event for `%s` at `%s`' % (channel, context))
+        self.set_header('Content-Type', 'application/json')
 
         if not self.request.body:
             self.set_status(400)
