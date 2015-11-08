@@ -44,20 +44,21 @@ class EventsHandler(tornado.web.RequestHandler):
         cursor = self.mongodb.find(condition)
 
         # Use peek mode
+        quantity = yield cursor.count()
         if peek:
             if not peek.isdigit():
                 self.set_status(400)
                 self.write(dumps({'error': 'Peek param should be and integer value.'}))
                 return
 
-            if (yield cursor.count()) < peek:
+            if quantity > peek:
                 self.set_status(204)
                 return
 
             self.logger.info('Peek index: `%s`' % peek)
             cursor.limit(int(peek)).skip(1)
         # Check if response not to big
-        elif (yield cursor.count()) > 100:
+        elif quantity > 100:
             self.set_status(400)
             self.write(dumps({'error': 'Requested range is to big.'}))
             return
