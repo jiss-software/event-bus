@@ -51,12 +51,12 @@ class EventsHandler(tornado.web.RequestHandler):
                 self.write(dumps({'error': 'Peek param should be and integer value.'}))
                 return
 
-            if quantity > peek:
+            if quantity < int(peek):
                 self.set_status(204)
                 return
 
             self.logger.info('Peek index: `%s`' % peek)
-            cursor.limit(int(peek)).skip(1)
+            cursor.skip(int(peek)).limit(1)
         # Check if response not to big
         elif quantity > 100:
             self.set_status(400)
@@ -67,7 +67,7 @@ class EventsHandler(tornado.web.RequestHandler):
         data = yield cursor.sort([('timestamp', ASCENDING)]).to_list(length=100)
 
         # Format response
-        result = dumps([(item['timestamp'], item['payload']) for item in data])
+        result = dumps(data)
         self.logger.info('Response for events list: %s' % result)
         self.write(result)
 
