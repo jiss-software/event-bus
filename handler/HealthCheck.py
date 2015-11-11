@@ -1,12 +1,8 @@
+import core
 import tornado
-from bson.json_util import dumps
 
 
-class HealthCheckHandler(tornado.web.RequestHandler):
-    def initialize(self, logger, mongodb):
-        self.logger = logger
-        self.mongodb = mongodb
-
+class HealthCheckHandler(core.BaseHandler):
     @tornado.web.asynchronous
     @tornado.gen.coroutine
     def get(self):
@@ -16,16 +12,13 @@ class HealthCheckHandler(tornado.web.RequestHandler):
             'mongodb': None
         }
 
-        components['mongodb'] = yield self.mongodb.alive()
+        components['mongodb'] = yield self.settings['db'].alive()
 
         for key in components:
             if components[key] is None:
                 components[key] = False
 
-        result = dumps({
+        self.response_json({
             'status': False not in components.values(),
             'components': components
         })
-
-        self.logger.info('Response for health check: %s' % result)
-        self.write(result)

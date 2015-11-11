@@ -1,45 +1,27 @@
 import tornado.ioloop
 import tornado.web
 import logging
-from handler import HealthCheckHandler
-from handler import EventsHandler
 import motor
-from tornado.options import define, options
+from settings import routing
+from tornado.options import options
 import os
-import sys
 
-
-define("port", default=33002, help="Application port")
-define("db_address", default="mongodb://mongodb:27017", help="Database address")
-define("db_name", default="Events", help="Database name")
-define("max_buffer_size", default=50 * 1024**2, help="")
-define("log_dir", default="log", help="Logger directory")
+tornado.options.parse_command_line()
 
 if not os.path.exists(options.log_dir):
     os.makedirs(options.log_dir)
 
 logging.basicConfig(
     format='%(asctime)s [%(name)s] %(levelname)s: %(message)s',
-    filename='log/server.log',
+    filename='%s/%s' % (options.log_dir, options.log_file),
     level=logging.DEBUG
 )
 
 ioLoop = tornado.ioloop.IOLoop.current()
-try:
-    mongodb = ioLoop.run_sync(motor.MotorClient(options.db_address).open)
-except:
-    logging.getLogger('INIT').error('Cannot connect to mongodb')
-    sys.exit()
 
-context = dict(
-    logger=logging.getLogger('HealthCheck'),
-    mongodb=mongodb
-)
-
-app = tornado.web.Application([
-    (r"/", HealthCheckHandler, context),
-    (r"/events/([A-Za-z_.]*)/([A-Za-z_.]*)", EventsHandler, context),
-], autoreload=True)
+logging.getLogger('INIT').info('Connecting to mongodb at: %s' % options.db_address)
+mongodb = ioLoop.run_sync(motor.MotorClient(options.db_address).open)
+app = tornado.web.Application(routing, db=mongodb, autoreload=options.autoreload)
 
 app.listen(options.port)
 
