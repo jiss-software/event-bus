@@ -1,6 +1,7 @@
 import tornado
 import logging
-from bson.json_util import dumps
+from JsonEncoders import JsonEncoders
+from json import dumps
 
 
 class BaseHandler(tornado.web.RequestHandler):
@@ -57,10 +58,10 @@ class BaseHandler(tornado.web.RequestHandler):
     def response_error(self, text, code=500):
         self.set_header('Content-Type', 'application/json')
         self.set_status(code)
-        self.write(dumps({'error': text}))
+        self.write(self._dumps({'error': text}))
 
     def response_json(self, data, code=200):
-        response = dumps(data)
+        response = self._dumps(data)
 
         self.set_header('Content-Type', 'application/json')
         self.set_status(code)
@@ -70,3 +71,6 @@ class BaseHandler(tornado.web.RequestHandler):
 
     def options(self):
         pass
+
+    def _dumps(self, data):
+        return dumps(data, cls=JsonEncoders)
