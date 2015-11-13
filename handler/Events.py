@@ -60,7 +60,7 @@ class EventsHandler(core.BaseHandler):
         data = yield cursor.sort([('timestamp', ASCENDING)]).to_list(length=100)
 
         # Format response
-        self.response_json(data)
+        self.response_json(data, 201)
 
     @tornado.web.asynchronous
     @tornado.gen.coroutine
