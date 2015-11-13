@@ -60,7 +60,7 @@ class EventsHandler(core.BaseHandler):
         data = yield cursor.sort([('timestamp', ASCENDING)]).to_list(length=100)
 
         # Format response
-        self.response_json(data, 201)
+        self.response_json(data)
 
     @tornado.web.asynchronous
     @tornado.gen.coroutine
@@ -91,4 +91,4 @@ class EventsHandler(core.BaseHandler):
         new_id = yield collection.save(event)
 
         self.logger.info('New event registered events list: %s' % dumps(event))
-        self.response_json({'id': new_id, 'timestamp': timestamp})
+        self.response_json({'id': new_id, 'timestamp': timestamp}, 201)
