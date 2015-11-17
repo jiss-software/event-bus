@@ -69,8 +69,9 @@ class BaseHandler(tornado.web.RequestHandler):
         self.finish()
         self.logger.info('Response: %s' % response)
 
-    def options(self):
-        pass
+    def options(self, **ignore):
+        self.set_status(200)
+        self.finish()
 
     def _dumps(self, data):
         return dumps(data, cls=JsonEncoders)
