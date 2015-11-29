@@ -56,14 +56,14 @@ class BaseHandler(tornado.web.RequestHandler):
             self.add_header(key, value)
 
     def response_error(self, text, code=500):
-        self.set_header('Content-Type', 'application/json')
+        self.set_header('Content-Type', 'application/json; charset=UTF-8')
         self.set_status(code)
         self.write(self._dumps({'error': text}))
 
     def response_json(self, data, code=200):
         response = self._dumps(data)
 
-        self.set_header('Content-Type', 'application/json')
+        self.set_header('Content-Type', 'application/json; charset=UTF-8')
         self.set_status(code)
         self.write(response)
         self.finish()
