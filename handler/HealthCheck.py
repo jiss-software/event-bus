@@ -20,5 +20,7 @@ class HealthCheckHandler(core.BaseHandler):
 
         self.response_json({
             'status': False not in components.values(),
-            'components': components
+            'components': components,
+            'version': self.settings['version'],
+            'started': self.settings['started']
         })

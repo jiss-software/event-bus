@@ -5,6 +5,8 @@ import motor
 from settings import routing
 from tornado.options import options
 import os
+import subprocess
+import datetime
 
 tornado.options.parse_command_line()
 
@@ -17,11 +19,14 @@ logging.basicConfig(
     level=logging.DEBUG
 )
 
+version = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'])
+started = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
 ioLoop = tornado.ioloop.IOLoop.current()
 
 logging.getLogger('INIT').info('Connecting to mongodb at: %s' % options.db_address)
 mongodb = ioLoop.run_sync(motor.MotorClient(options.db_address).open)
-app = tornado.web.Application(routing, db=mongodb, autoreload=options.autoreload)
+app = tornado.web.Application(routing, db=mongodb, version=version, started=started, autoreload=options.autoreload)
 
 app.listen(options.port)
 
