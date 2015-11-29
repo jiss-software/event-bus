@@ -19,7 +19,7 @@ logging.basicConfig(
     level=logging.DEBUG
 )
 
-version = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'])
+version = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).strip()
 started = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 ioLoop = tornado.ioloop.IOLoop.current()
